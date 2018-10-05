@@ -15,4 +15,3 @@ export const Timeline = require('./Renderer/Timeline.js').default
 export const Specs = require('./Specs/Specs.js').default
 
 export const RenderableUpdater = require('./RenderableUpdater/RenderableUpdater.vue').default
-export const FrameUpdater = require('./FrameUpdater/FrameUpdater.vue').default
