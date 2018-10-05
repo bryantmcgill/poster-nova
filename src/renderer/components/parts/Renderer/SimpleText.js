@@ -45,9 +45,9 @@ export default class SimpleText extends Renderable {
     this.uniforms.opacity.value = 1.0 - progress
   }
   onOverall ({ progress, delta }) {
-    this.mesh.scale.x = progress || 0.0000000001
-    this.mesh.scale.y = progress || 0.0000000001
-    this.mesh.scale.z = progress || 0.0000000001
+    // this.mesh.scale.x = progress || 0.0000000001
+    // this.mesh.scale.y = progress || 0.0000000001
+    // this.mesh.scale.z = progress || 0.0000000001
   }
   prep () {
     return this.wait()

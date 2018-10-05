@@ -6,7 +6,6 @@ export default class Renderable {
     this.parent = parent
     this.info = info
     this.group = new THREE.Object3D()
-    console.log(info)
 
     var binded = {
       onStarting: this.onStarting.bind(this),

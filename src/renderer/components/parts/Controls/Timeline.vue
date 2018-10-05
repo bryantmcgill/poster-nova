@@ -5,13 +5,12 @@
      Magnify Scale<input type="number" v-model="scaler" min="1" max="3" step="0.1">
      Total Time (s)<input type="number" :value="totalTime" @input="(e) => { let v = e.target.value; $emit('totalTime', v) }" min="1" step="1">
      Sort <button @click="() => { timeline.sort(); }">Sort</button>
-
      Time: <span>{{ (markerPX / maxWidth * totalTime).toFixed(1) }}</span>
   </div>
   <div class="track-rows" ref="tracker" @mousemove="onHover">
     <div class="track-scroll" @scroll="onScroll">
       <Tracker :style="getWidthTrack({ irt })" class="tracker-block" :key="irt" v-for="(rt, irt) in renderer.renderables" :ref="'line'" :totalTime="totalTime">
-        <div @click="$emit('onSelect', { renderable: rt })" class="track-title" :style="{ cursor: 'pointer', paddingLeft: '20px', transform: `translate3d(${varying.lefter}px,0,1px)`, 'white-space': 'pre' }">{{ rt.info.text.split('\n').shift() }}</div>
+        <div @click="$emit('onSelect', { renderable: rt })" class="track-title" :style="{ cursor: 'pointer', paddingLeft: '20px', transform: `translate3d(${varying.lefter}px,0,1px)`, 'white-space': 'pre' }">{{ rt.info.text.split('\n').shift().slice(0, 30) }}...</div>
         <FrameSet @onSelect="$emit('onSelect', { renderable: rt })" :specs="specs" :e="irt / renderer.renderables.length"  v-if="rt && timeline" :renderable="rt" :totalTime="totalTime" :maxWidth="maxWidth"></FrameSet>
       </Tracker>
     </div>

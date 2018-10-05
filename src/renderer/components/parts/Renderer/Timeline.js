@@ -28,9 +28,9 @@ export default class Timeline {
       .map((fs) => {
         if (time < fs.start) {
           let progress = 0
+
           fs.starting({ delta, progress })
           fs.during({ delta, progress })
-          fs.leaving({ delta, progress })
           fs.overall({ delta, progress })
         }
         return fs
@@ -75,7 +75,7 @@ export default class Timeline {
       .map((fs) => {
         if (time > fs.end) {
           let progress = 1
-          fs.starting({ delta, progress })
+          // fs.starting({ delta, progress })
           fs.during({ delta, progress })
           fs.leaving({ delta, progress })
           fs.overall({ delta, progress })
