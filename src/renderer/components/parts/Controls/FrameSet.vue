@@ -1,6 +1,6 @@
 <template>
-<div class="full" :style="{ 'backgroundColor': `hsla(${(e * 360).toFixed(0)}, 70%, 70%, 1.0)` }" @mousedown="(e) => { onMD(e, selection) }"  @mousemove="(e) => { onMM(e, selection) }"  @mouseup="(e) => { onMU(e, selection) }" >
-  <div class="frameset" :style="getFrameSetStyle({ renderable, maxWidth, totalTime })" >
+<div class="full" @mousedown="(e) => { onMD(e, selection) }"  @mousemove="(e) => { onMM(e, selection) }"  @mouseup="(e) => { onMU(e, selection) }" >
+  <div class="frameset" :style="getFrameSetStyle({ renderable, maxWidth, totalTime })"  @click="$emit('onSelect')"  >
 
     <div class="starting" :style="getStartingStyle({ renderable, maxWidth, totalTime })">
       <div class="diamond afterStart-diamond"  @mousedown="() => { selection = 'afterStart'; }" ></div>
@@ -36,7 +36,8 @@ export default {
       }
     }
   },
-
+  mounted () {
+  },
   methods: {
     onMD (evt) {
       this.fs.isDown = true

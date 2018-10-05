@@ -2,22 +2,17 @@
 <div v-if="specs">
   <div>
     <h1>Rainbow Timeline</h1>
-     Magnify Scale<input type="number" v-model="scaler" min="1" step="0.1">
+     Magnify Scale<input type="number" v-model="scaler" min="1" max="3" step="0.1">
      Total Time (s)<input type="number" :value="totalTime" @input="(e) => { let v = e.target.value; $emit('totalTime', v) }" min="1" step="1">
      Sort <button @click="() => { timeline.sort(); }">Sort</button>
+
+     Time: <span>{{ (markerPX / maxWidth * totalTime).toFixed(1) }}</span>
   </div>
   <div class="track-rows" ref="tracker" @mousemove="onHover">
-    <div ref="time-track" class="time-track">
-      <div class="time-interval" :key="iT + 't1'" v-for="(t, iT) in intervalMarkers" :style="{ left: t.px1 + 'px' }"></div>
-      <div class="time-interval-2" :key="iT + 't2'" v-for="(t, iT) in intervalMarkers" :style="{ left: t.px2 + 'px' }"></div>
-    </div>
     <div class="track-scroll" @scroll="onScroll">
-      <Tracker :style="getWidthTrack()" class="tracker-block" @click="$emit('onSelect', { renderable: rt })" :key="irt" v-for="(rt, irt) in renderer.renderables" :ref="'line'" :totalTime="totalTime">
-
-        <div class="track-title" :style="{ transform: `translate3d(${30  + lefter}px,0,1px)` }">{{ rt.info.text }}</div>
-
-        <FrameSet :specs="specs" :e="irt / renderer.renderables.length"  v-if="rt && timeline" :renderable="rt" :totalTime="totalTime" :maxWidth="maxWidth"></FrameSet>
-
+      <Tracker :style="getWidthTrack({ irt })" class="tracker-block" :key="irt" v-for="(rt, irt) in renderer.renderables" :ref="'line'" :totalTime="totalTime">
+        <div class="track-title" :style="{ transform: `translate3d(${20  + varying.lefter}px,0,1px)`, 'white-space': 'pre' }">{{ rt.info.text.split('\n').shift() }}</div>
+        <FrameSet  @onSelect="$emit('onSelect', { renderable: rt })" :specs="specs" :e="irt / renderer.renderables.length"  v-if="rt && timeline" :renderable="rt" :totalTime="totalTime" :maxWidth="maxWidth"></FrameSet>
       </Tracker>
     </div>
     <div ref="marker" class="time-cursor"></div>
@@ -42,9 +37,13 @@ export default {
   },
   data () {
     return {
-      lefter: 0,
+      realtime: {
+        lefter: 0
+      },
+      varying: {
+        lefter: 0
+      },
       scaler: 1,
-      intervalMarkers: [],
       markerPX: 0,
       maxWidth: 1
     }
@@ -71,22 +70,35 @@ export default {
   },
   mounted () {
     this.refresh()
+    let rAF = () => {
+      this.rAFID = window.requestAnimationFrame(rAF)
+      this.varying.lefter += (this.realtime.lefter - this.varying.lefter) * 0.1
+
+      if (this.$refs['time-track']) {
+        this.$refs['time-track'].scrollLeft = this.varying.lefter
+      }
+    }
+    this.rAFID = window.requestAnimationFrame(rAF)
+  },
+  beforeDestroy () {
+    window.cancelAnimationFrame(this.rAFID)
   },
   methods: {
     refresh () {
       this.prepTrackerInfo()
-      this.makeIntervalMarkers()
     },
     getScaler () {
       return this.scaler
     },
     getFullWidth () {
-      return this.totalTime * 20 * this.scaler * 2
+      return this.totalTime * 15 * this.scaler * 2
       // return this.$refs['time-track'].getBoundingClientRect().width
     },
-    getWidthTrack () {
+    getWidthTrack ({ irt }) {
       let w = this.getFullWidth() * this.getScaler()
+      let e = irt / this.renderer.renderables.length
       return {
+        'backgroundColor': `hsla(${(e * 360).toFixed(0)}, 70%, 70%, 1.0)`,
         width: w + 'px'
       }
     },
@@ -98,17 +110,6 @@ export default {
       //     this.maxWidth = line.getBoundingClientRect().width * this.getScaler()
       //   }
       // }, false)
-    },
-    makeIntervalMarkers () {
-      this.intervalMarkers = []
-      let n = this.maxWidth
-      for (var i = 0; i < n; i++) {
-        // let e = i / rect.width
-        this.intervalMarkers.push({
-          px1: i * 50 * this.getScaler(),
-          px2: i * 10 * this.getScaler()
-        })
-      }
     },
     onAdd (evt) {
       this.$emit('onAdd', evt)
@@ -124,10 +125,11 @@ export default {
       this.$refs['marker'].style.left = this.markerPX + 'px'
     },
     onScroll (evt) {
-      this.lefter = evt.target.scrollLeft
-      this.$nextTick(() => {
-        this.$refs['time-track'].scrollLeft = evt.target.scrollLeft
-      })
+      this.realtime.lefter = evt.target.scrollLeft
+
+      // this.$nextTick(() => {
+      //   this.$refs['time-track'].scrollLeft = evt.target.scrollLeft
+      // })
     }
   }
 }
@@ -159,6 +161,7 @@ export default {
   position: absolute;
   top: 0px;
   left: 10px;
+  transform: translate3d(0,0,0.1px);
 }
 
 .time-track{

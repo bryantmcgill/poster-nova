@@ -112,6 +112,7 @@ export default {
   },
   data () {
     return {
+      playing: false,
       rafID: 0,
       time: 0,
       varTime: 0,
@@ -121,6 +122,17 @@ export default {
   },
   mounted () {
     this.onLoop()
+    window.addEventListener('keydown', (evt) => {
+      if (evt.keyCode === 32) {
+        evt.preventDefault()
+        if (this.playing) {
+          this.onStop()
+        } else {
+          this.onPlay()
+        }
+        this.playing = !this.playing
+      }
+    })
   },
   beforeDestroy () {
     window.cancelAnimationFrame(this.rafID)
