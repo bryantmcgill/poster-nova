@@ -1,6 +1,6 @@
 <template>
-<div class="full" :style="{ 'backgroundColor': `hsla(${(e * 360).toFixed(0)}, 50%, 50%, 1.0)` }" @mousedown="(e) => { onMD(e, selection) }"  @mousemove="(e) => { onMM(e, selection) }"  @mouseup="(e) => { onMU(e, selection) }" >
-  <div class="frameset" @click="$emit('onSelect')" :style="getFrameSetStyle({ renderable, maxWidth, totalTime })" >
+<div class="full" :style="{ 'backgroundColor': `hsla(${(e * 360).toFixed(0)}, 70%, 70%, 1.0)` }" @mousedown="(e) => { onMD(e, selection) }"  @mousemove="(e) => { onMM(e, selection) }"  @mouseup="(e) => { onMU(e, selection) }" >
+  <div class="frameset" :style="getFrameSetStyle({ renderable, maxWidth, totalTime })" >
 
     <div class="starting" :style="getStartingStyle({ renderable, maxWidth, totalTime })">
       <div class="diamond afterStart-diamond"  @mousedown="() => { selection = 'afterStart'; }" ></div>
@@ -187,31 +187,31 @@ export default {
 .diamond{
   z-index: 100;
   position: absolute;
-  height: 25px;
-  top: calc(50% - (25px / 2));
-  width: 25px;
-  background-color: rgba(255,255,255,1.0);
+  height: 15px;
+  top: calc(50% - (15px / 2));
+  width: 15px;
+  background-color: rgba(255,255,255,0.5);
   border: grey solid 1px;
 }
 
 .center-diamond{
   left: 50%;
-  transform:  scale(0.5) translateX(calc(25px / -2)) rotate(45deg) translateZ(10px);
+  transform:  scale(0.5) translateX(calc(15px / -2)) rotate(45deg) translateZ(10px);
 }
 
 .start-diamond{
-  transform:  translateX(calc(25px / -2)) rotate(45deg) translateZ(10px);
+  transform:  translateX(calc(15px / -2)) rotate(45deg) translateZ(10px);
 }
 .end-diamond{
-  transform:  translateX(calc(25px / 2)) rotate(45deg) translateZ(10px);
+  transform:  translateX(calc(15px / 2)) rotate(45deg) translateZ(10px);
   right: 0px;
 }
 .afterStart-diamond{
-  transform: translateX(calc(25px / 2)) rotate(45deg) translateZ(10px) scale(0.75);
+  transform: translateX(calc(15px / 2)) rotate(45deg) translateZ(10px) scale(0.75);
   right: 0px;
 }
 .beforeEnd-diamond{
-  transform: translateX(calc(25px / -2)) rotate(45deg) translateZ(10px) scale(0.75);
+  transform: translateX(calc(15px / -2)) rotate(45deg) translateZ(10px) scale(0.75);
   left: 0px;
 }
 </style>

@@ -17,10 +17,10 @@ export default {
 <style scoped>
 .track{
   position: relative;
-  height: 45px;
+  height: 20px;
   box-sizing: border-box;
   border-bottom: black solid 1px;
-  line-height: 45px;
+  line-height: 20px;
   width: 100%;
 }
 </style>

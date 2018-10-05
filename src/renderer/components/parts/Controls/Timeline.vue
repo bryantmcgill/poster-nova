@@ -12,8 +12,12 @@
       <div class="time-interval-2" :key="iT + 't2'" v-for="(t, iT) in intervalMarkers" :style="{ left: t.px2 + 'px' }"></div>
     </div>
     <div class="track-scroll" @scroll="onScroll">
-      <Tracker :style="getWidthTrack()" class="tracker-block" :key="irt" v-for="(rt, irt) in renderer.renderables" :ref="'line'" :totalTime="totalTime">
-        <FrameSet :specs="specs" :e="irt / renderer.renderables.length" @onSelect="$emit('onSelect', { renderable: rt })" v-if="rt && timeline" :renderable="rt" :totalTime="totalTime" :maxWidth="maxWidth"></FrameSet>
+      <Tracker :style="getWidthTrack()" class="tracker-block" @click="$emit('onSelect', { renderable: rt })" :key="irt" v-for="(rt, irt) in renderer.renderables" :ref="'line'" :totalTime="totalTime">
+
+        <div class="track-title" :style="{ transform: `translate3d(${30  + lefter}px,0,1px)` }">{{ rt.info.text }}</div>
+
+        <FrameSet :specs="specs" :e="irt / renderer.renderables.length"  v-if="rt && timeline" :renderable="rt" :totalTime="totalTime" :maxWidth="maxWidth"></FrameSet>
+
       </Tracker>
     </div>
     <div ref="marker" class="time-cursor"></div>
@@ -38,7 +42,8 @@ export default {
   },
   data () {
     return {
-      scaler: 2,
+      lefter: 0,
+      scaler: 1,
       intervalMarkers: [],
       markerPX: 0,
       maxWidth: 1
@@ -75,20 +80,24 @@ export default {
     getScaler () {
       return this.scaler
     },
+    getFullWidth () {
+      return this.totalTime * 20 * this.scaler * 2
+      // return this.$refs['time-track'].getBoundingClientRect().width
+    },
     getWidthTrack () {
-      let w = this.$refs['time-track'].getBoundingClientRect().width * this.getScaler()
+      let w = this.getFullWidth() * this.getScaler()
       return {
         width: w + 'px'
       }
     },
     prepTrackerInfo () {
-      this.maxWidth = this.$refs['time-track'].getBoundingClientRect().width * this.getScaler()
-      window.addEventListener('resize', () => {
-        let line = this.$refs['time-track']
-        if (line) {
-          this.maxWidth = line.getBoundingClientRect().width * this.getScaler()
-        }
-      }, false)
+      this.maxWidth = this.getFullWidth() * this.getScaler()
+      // window.addEventListener('resize', () => {
+      //   let line = this.$refs['time-track']
+      //   if (line) {
+      //     this.maxWidth = line.getBoundingClientRect().width * this.getScaler()
+      //   }
+      // }, false)
     },
     makeIntervalMarkers () {
       this.intervalMarkers = []
@@ -115,6 +124,7 @@ export default {
       this.$refs['marker'].style.left = this.markerPX + 'px'
     },
     onScroll (evt) {
+      this.lefter = evt.target.scrollLeft
       this.$nextTick(() => {
         this.$refs['time-track'].scrollLeft = evt.target.scrollLeft
       })
@@ -178,6 +188,12 @@ export default {
   line-height: 44px;
   position: absolute;
   bottom: 0px;
+  left: 0px;
+}
+
+.track-title{
+  position: absolute;
+  top: 0px;
   left: 0px;
 }
 </style>

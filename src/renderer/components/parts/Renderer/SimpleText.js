@@ -33,7 +33,7 @@ export default class SimpleText extends Renderable {
   onStarting ({ progress, delta }) {
     // this.group.rotation.x = progress * Math.PI * 2
     this.uniforms.opacity.value = progress
-    this.mesh.rotation.z = progress * Math.PI * 2
+    this.mesh.rotation.x = progress * Math.PI * 2
   }
   onDuring ({ progress, delta }) {
     this.mesh.rotation.y = progress * Math.PI * 2
@@ -41,6 +41,7 @@ export default class SimpleText extends Renderable {
   }
   onLeaving ({ progress, delta }) {
     // this.group.rotation.z = progress * Math.PI * 2
+    this.mesh.rotation.y = (1.0 - progress) * Math.PI * 2
     this.uniforms.opacity.value = 1.0 - progress
   }
   onOverall ({ progress, delta }) {
