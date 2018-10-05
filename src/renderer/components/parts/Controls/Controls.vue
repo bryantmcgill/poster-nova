@@ -120,7 +120,7 @@ export default {
       rafID: 0,
       time: 0,
       varTime: 0,
-      totalTime: 50,
+      totalTime: 60,
       currentItemID: false
     }
   },
@@ -222,7 +222,7 @@ textarea{
 }
 .ace-box{
   width: calc(100% / 3);
-  min-width: 300px;
+  min-width: 100px;
   display: block;
 }
 .ace-row{

@@ -31,24 +31,41 @@ export default class SimpleText extends Renderable {
     })
   }
   onStarting ({ progress, delta }) {
+    this.uniforms.wiggle.value += delta * progress
     // this.group.rotation.x = progress * Math.PI * 2
     this.uniforms.opacity.value = progress
     // this.mesh.rotation.x = progress * Math.PI * 2
+
+    this.mesh.scale.x = (progress) || 0.0000000001
+    this.mesh.scale.y = (progress) || 0.0000000001
+    this.mesh.scale.z = (progress) || 0.0000000001
   }
   onDuring ({ progress, delta }) {
+    // console.log('onDuring', delta)
+    this.uniforms.wiggle.value += delta
+
     // this.mesh.rotation.y = progress * Math.PI * 2
     // this.mesh.rotation.x = progress * Math.PI * 2
-  // this.group.rotation.y = progress * Math.PI * 2
+    // this.group.rotation.y = progress * Math.PI * 2
   }
   onLeaving ({ progress, delta }) {
+    this.uniforms.wiggle.value += delta * (1.0 - progress)
     // this.group.rotation.z = progress * Math.PI * 2
     // this.mesh.rotation.y = (1.0 - progress) * Math.PI * 2
     this.uniforms.opacity.value = 1.0 - progress
+
+    this.mesh.scale.x = (1.0 - progress) || 0.0000000001
+    this.mesh.scale.y = (1.0 - progress) || 0.0000000001
+    this.mesh.scale.z = (1.0 - progress) || 0.0000000001
   }
   onOverall ({ progress, delta }) {
-    // this.mesh.scale.x = progress || 0.0000000001
-    // this.mesh.scale.y = progress || 0.0000000001
-    // this.mesh.scale.z = progress || 0.0000000001
+    // if (progress <= 0.01 || progress >= 0.99) {
+    //   this.group.visible = false
+    //   console.log(this.group.visible, this.info.text)
+    // } else if (this.group.visible !== true) {
+    //   this.group.visible = true
+    //   console.log(this.group.visible, this.info.text)
+    // }
   }
   prep () {
     return this.wait()
@@ -87,6 +104,7 @@ export default class SimpleText extends Renderable {
   }
   setupMaterial () {
     this.uniforms = {
+      wiggle: { value: 0 },
       opacity: { value: 1 },
       time: { value: 0 },
       text: { value: null }
@@ -105,12 +123,13 @@ export default class SimpleText extends Renderable {
     // varying vec3 vPos;
     uniform float time;
     varying vec2 vUv;
+    uniform float wiggle;
 
     void main (void) {
       vec3 nPos = position;
 
-      // nPos.z += sin(time * 4.0 + 0.05 * nPos.x) * 3.0;
-      // nPos.z += sin(time * 4.0 + 0.05 * nPos.y) * 3.0;
+      nPos.z += sin(wiggle * 4.0 + 0.05 * nPos.x) * 3.0;
+      nPos.z += sin(wiggle * 4.0 + 0.05 * nPos.y) * 3.0;
 
       vUv = uv;
 
