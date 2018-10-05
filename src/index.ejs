@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Poster Nova</title>
+
+    <!-- <link href="/static/FrameJS/editor/css/main.css" rel="stylesheet" />
+		<link id="theme" href="/static/FrameJS/editor/css/dark.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/static/FrameJS/editor/js/libs/codemirror/codemirror.css">
+		<link rel="stylesheet" href="/static/FrameJS/editor/js/libs/codemirror/theme/monokai.css">
+		<script src="/static/FrameJS/editor/js/libs/codemirror/codemirror.js"></script>
+		<script src="/static/FrameJS/editor/js/libs/codemirror/mode/javascript.js"></script>
+
+		<link rel="stylesheet" href="/static/FrameJS/editor/js/libs/codemirror/addon/dialog/dialog.css">
+		<link rel="stylesheet" href="/static/FrameJS/editor/js/libs/codemirror/addon/search/matchesonscrollbar.css">
+		<script src="/static/FrameJS/editor/js/libs/codemirror/addon/dialog/dialog.js"></script>
+		<script src="/static/FrameJS/editor/js/libs/codemirror/addon/search/searchcursor.js"></script>
+		<script src="/static/FrameJS/editor/js/libs/codemirror/addon/search/search.js"></script>
+		<script src="/static/FrameJS/editor/js/libs/codemirror/addon/scroll/annotatescrollbar.js"></script>
+		<script src="/static/FrameJS/editor/js/libs/codemirror/addon/search/matchesonscrollbar.js"></script>
+		<script src="/static/FrameJS/editor/js/libs/codemirror/addon/search/jump-to-line.js"></script>
+
+		<script src="/static/FrameJS/editor/js/libs/signals.js"></script>
+		<script src="/static/FrameJS/editor/js/libs/ui.js"></script>
+
+		<script src="/static/FrameJS/editor/js/Editor.js"></script>
+		<script src="/static/FrameJS/editor/js/Code.js"></script>
+		<script src="/static/FrameJS/editor/js/Config.js"></script>
+		<script src="/static/FrameJS/editor/js/Menubar.js"></script>
+		<script src="/static/FrameJS/editor/js/Menubar.File.js"></script>
+		<script src="/static/FrameJS/editor/js/Menubar.Edit.js"></script>
+		<script src="/static/FrameJS/editor/js/Menubar.Examples.js"></script>
+		<script src="/static/FrameJS/editor/js/Menubar.Help.js"></script>
+		<script src="/static/FrameJS/editor/js/Sidebar.js"></script>
+		<script src="/static/FrameJS/editor/js/Sidebar.Animation.js"></script>
+		<script src="/static/FrameJS/editor/js/Sidebar.Project.js"></script>
+		<script src="/static/FrameJS/editor/js/Sidebar.Settings.js"></script>
+		<script src="/static/FrameJS/editor/js/Viewport.js"></script>
+		<script src="/static/FrameJS/editor/js/Controls.js"></script>
+		<script src="/static/FrameJS/editor/js/Timeline.js"></script>
+		<script src="/static/FrameJS/editor/js/Timeline.Animations.js"></script>
+		<script src="/static/FrameJS/editor/js/Timeline.Curves.js"></script>
+
+    <script src="/static/FrameJS/src/Frame.js"></script> -->
+
+    <% if (htmlWebpackPlugin.options.nodeModules) { %>
+      <!-- Add `node_modules/` to global paths so `require` works properly in development -->
+      <script>
+        require('module').globalPaths.push('<%= htmlWebpackPlugin.options.nodeModules.replace(/\\/g, '\\\\') %>')
+      </script>
+    <% } %>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- Set `__static` path to static files in production -->
+    <script>
+      if (process.env.NODE_ENV !== 'development') window.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+    </script>
+
+    <!-- webpack builds are automatically injected -->
+  </body>
+</html>
