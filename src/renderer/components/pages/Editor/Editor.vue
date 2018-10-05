@@ -1,8 +1,11 @@
 <template>
   <div class="full">
-    <Previewer v-if="renderer" :renderer="renderer" />
 
 
+
+    <div class="top-right">
+      <Previewer v-if="renderer" :renderer="renderer" />
+    </div>
     <RenderableUpdater
       v-if="renderer && specs && specs.items"
       :key="info.id"
@@ -14,6 +17,15 @@
     >
     </RenderableUpdater>
 
+    <div>
+      <Controls
+      v-if="specs"
+      :specs="specs"
+      :timeline="timeline"
+      :renderer="renderer"
+      />
+    </div>
+
     <!-- <FrameUpdater
       v-if="renderer && timeline && timeline.items"
       :key="info.id"
@@ -24,14 +36,7 @@
       :item="info"
     >
     </FrameUpdater> -->
-    <div>
-      <Controls
-      v-if="specs"
-      :specs="specs"
-      :timeline="timeline"
-      :renderer="renderer"
-      />
-    </div>
+
 
   </div>
 </template>
@@ -68,6 +73,11 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.top-right{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
 
 </style>

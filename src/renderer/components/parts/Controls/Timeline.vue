@@ -5,7 +5,7 @@
      Magnify Scale<input type="number" v-model="scaler" min="1" max="3" step="0.1">
      Total Time (s)<input type="number" :value="totalTime" @input="(e) => { let v = e.target.value; $emit('totalTime', v) }" min="1" step="1">
      Sort <button @click="() => { timeline.sort(); }">Sort</button>
-     Time: <span>{{ (markerPX / maxWidth * totalTime).toFixed(1) }}</span>
+     Time: <span>{{ (time).toFixed(1) }}</span>
   </div>
   <div class="track-rows" ref="tracker" @mousemove="onHover">
     <div class="track-scroll" @scroll="onScroll">
@@ -50,12 +50,12 @@ export default {
   watch: {
     time () {
       if (this.$refs['marker']) {
-        this.$refs['marker'].style.left = this.maxWidth * (this.time / this.totalTime) + 'px'
+        this.$refs['marker'].style.left = (this.time / this.totalTime) * (this.maxWidth) + 'px'
       }
     },
     markerPX () {
       this.$emit('onHover', {
-        percentage: this.markerPX / this.maxWidth,
+        percentage: (this.markerPX + this.realtime.lefter) / this.maxWidth,
         at: this.markerPX,
         full: this.maxWidth
       })
@@ -72,10 +72,6 @@ export default {
     let rAF = () => {
       this.rAFID = window.requestAnimationFrame(rAF)
       this.varying.lefter += (this.realtime.lefter - this.varying.lefter) * 0.1
-
-      if (this.$refs['time-track']) {
-        this.$refs['time-track'].scrollLeft = this.varying.lefter
-      }
     }
     this.rAFID = window.requestAnimationFrame(rAF)
   },
@@ -119,13 +115,13 @@ export default {
       console.log(evt)
     },
     onHover (evt) {
-      let left = this.$refs['tracker'].scrollLeft || 0
-      this.markerPX = (left + evt.clientX)
+      // let left = this.$refs['tracker'].scrollLeft || 0
+      this.markerPX = (evt.clientX)
       this.$refs['marker'].style.left = this.markerPX + 'px'
     },
     onScroll (evt) {
       this.realtime.lefter = evt.target.scrollLeft
-
+      console.log(this.realtime.lefter)
       // this.$nextTick(() => {
       //   this.$refs['time-track'].scrollLeft = evt.target.scrollLeft
       // })
@@ -154,6 +150,7 @@ export default {
   padding-bottom: 15px;
 }
 .time-cursor{
+  cursor: pointer;
   height: 100%;
   width: 1px;
   background-color: red;

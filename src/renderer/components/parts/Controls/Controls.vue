@@ -1,5 +1,65 @@
 <template>
 <div>
+
+<div class="video-taller">
+  <h1>Controls <button v-if="currentItemID" @click="currentItemID = false">Close</button></h1>
+  <div :key="iSpec" v-for="(spec, iSpec) in specs.items" v-if="spec.id === currentItemID">
+    position xyz <input type="number" step="1" v-model="spec.position.x" /><input type="number" step="1" v-model="spec.position.y" /><input type="number" step="1" v-model="spec.position.z" />
+    <br />
+    rotation xyz <input type="number" :step="3.14159265 * 2 / 360 / 3" v-model="spec.rotation.x" /><input type="number" :step="3.14159265 * 2 / 360 / 3" v-model="spec.rotation.y" /><input type="number" :step="3.14159265 * 2 / 360 / 3" v-model="spec.rotation.z" />
+    <br />
+    scale xyz <input type="number" :step="0.01" v-model="spec.scale.x" /><input type="number" :step="0.01" v-model="spec.scale.y" /><input type="number" :step="0.01" v-model="spec.scale.z" />
+
+    <br />
+    <div class="ace-row">
+      <div class="ace-box">
+        <ACE
+          @save="() => {}"
+          :path="'happy.html'"
+          v-model="spec.text"
+          @input="(v) => { spec.text = v }"
+          theme="chrome"
+          :width="'100%'"
+          :height="'300px'"
+        >
+        </ACE>
+      </div>
+      <div class="ace-box">
+        <ACE
+          @save="() => {}"
+          :path="'happy.css'"
+          v-model="spec.container"
+          @input="(v) => { spec.container = v }"
+          theme="chrome"
+          :width="'100%'"
+          :height="'300px'"
+        >
+        </ACE>
+      </div>
+      <div class="ace-box">
+        <ACE
+          @save="() => {}"
+          :path="'happy.css'"
+          v-model="spec.box"
+          @input="(v) => { spec.box = v }"
+          theme="chrome"
+          :width="'100%'"
+          :height="'300px'"
+        >
+        </ACE>
+      </div>
+    </div>
+
+
+    <!-- <textarea v-model="spec.text" cols="30" rows="20"></textarea>
+    <textarea v-model="spec.container" cols="30" rows="20"></textarea>
+    <textarea v-model="spec.box" cols="30" rows="20"></textarea> -->
+
+  </div>
+
+
+</div>
+
 <button @click="onPlay">Play</button>
 <button @click="onStop">Stop</button>
 
@@ -15,84 +75,28 @@
   @totalTime="(tt) => { totalTime = tt }"
 />
 
-<h1>Controls <button v-if="currentItemID" @click="currentItemID = false">Close</button></h1>
-<div :key="iSpec" v-for="(spec, iSpec) in specs.items" v-if="spec.id === currentItemID">
-  position xyz <input type="number" step="1" v-model="spec.position.x" /><input type="number" step="1" v-model="spec.position.y" /><input type="number" step="1" v-model="spec.position.z" />
-  <br />
-  rotation xyz <input type="number" :step="3.14159265 * 2 / 360 / 3" v-model="spec.rotation.x" /><input type="number" :step="3.14159265 * 2 / 360 / 3" v-model="spec.rotation.y" /><input type="number" :step="3.14159265 * 2 / 360 / 3" v-model="spec.rotation.z" />
-  <br />
-  scale xyz <input type="number" :step="0.01" v-model="spec.scale.x" /><input type="number" :step="0.01" v-model="spec.scale.y" /><input type="number" :step="0.01" v-model="spec.scale.z" />
 
-  <br />
-  <div class="ace-row">
-    <div class="ace-box">
-      <ACE
-        @save="() => {}"
-        :path="'happy.html'"
-        v-model="spec.text"
-        @input="(v) => { spec.text = v }"
-        theme="chrome"
-        :width="'100%'"
-        :height="'300px'"
-      >
-      </ACE>
-    </div>
-    <div class="ace-box">
-      <ACE
-        @save="() => {}"
-        :path="'happy.css'"
-        v-model="spec.container"
-        @input="(v) => { spec.container = v }"
-        theme="chrome"
-        :width="'100%'"
-        :height="'300px'"
-      >
-      </ACE>
-    </div>
-    <div class="ace-box">
-      <ACE
-        @save="() => {}"
-        :path="'happy.css'"
-        v-model="spec.box"
-        @input="(v) => { spec.box = v }"
-        theme="chrome"
-        :width="'100%'"
-        :height="'300px'"
-      >
-      </ACE>
+
+  <h3>Add Items</h3>
+  <button @click="addSimpleText">Simple Text</button>
+  <div class="list">
+    <h3>Items</h3>
+    <div class="list-item" :key="iSpec" v-for="(spec, iSpec) in specs.items" v-if="specs">
+      {{ spec.ClassName }}: {{ spec.text.slice(0, 15) }}...
+      <button @click="editThis({ spec })">edit</button>
+      <button @click="specs.trash({ spec })">trash</button>
+      <button @click="specs.clone({ spec })">clone</button>
     </div>
   </div>
 
-
-  <!-- <textarea v-model="spec.text" cols="30" rows="20"></textarea>
-  <textarea v-model="spec.container" cols="30" rows="20"></textarea>
-  <textarea v-model="spec.box" cols="30" rows="20"></textarea> -->
-
-</div>
-
-
-
-<h3>Add Items</h3>
-<button @click="addSimpleText">Simple Text</button>
-<div class="list">
-  <h3>Items</h3>
-  <div class="list-item" :key="iSpec" v-for="(spec, iSpec) in specs.items" v-if="specs">
-    {{ spec.ClassName }}: {{ spec.text.slice(0, 15) }}...
-    <button @click="editThis({ spec })">edit</button>
-    <button @click="specs.trash({ spec })">trash</button>
-    <button @click="specs.clone({ spec })">clone</button>
+  <div class="list">
+    <h3>Trash</h3>
+    <div class="list-item" :key="iSpec" v-for="(spec, iSpec) in specs.trashBin">
+      {{ spec.ClassName }}: {{ spec.text.slice(0, 15) }}...
+      <button @click="specs.restore({ spec })">Restroe</button>
+      <button @click="specs.remove({ spec })">remove</button>
+    </div>
   </div>
-</div>
-
-<div class="list">
-  <h3>Trash</h3>
-  <div class="list-item" :key="iSpec" v-for="(spec, iSpec) in specs.trashBin">
-    {{ spec.ClassName }}: {{ spec.text.slice(0, 15) }}...
-    <button @click="specs.restore({ spec })">Restroe</button>
-    <button @click="specs.remove({ spec })">remove</button>
-  </div>
-</div>
-
 
 </div>
 </template>
@@ -123,7 +127,7 @@ export default {
   mounted () {
     this.onLoop()
     window.addEventListener('keydown', (evt) => {
-      if (evt.keyCode === 32) {
+      if (evt.keyCode === 32 && !this.currentItemID) {
         evt.preventDefault()
         if (this.playing) {
           this.onStop()
@@ -224,5 +228,9 @@ textarea{
 }
 .ace-row{
   display: flex;
+}
+.video-taller{
+  width: calc(100% - 500px);
+  height: 500px;
 }
 </style>
