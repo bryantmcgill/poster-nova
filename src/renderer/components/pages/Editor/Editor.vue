@@ -39,14 +39,13 @@
 <script>
 import Previewer from '@/components/parts/Previewer/Previewer.vue'
 import Controls from '@/components/parts/Controls/Controls.vue'
-import { Specs, Renderer, Timeline, RenderableUpdater, FrameUpdater } from '@/components/parts/'
+import { Specs, Renderer, Timeline, RenderableUpdater } from '@/components/parts/'
 
 export default {
   components: {
     Previewer,
     Controls,
-    RenderableUpdater,
-    FrameUpdater
+    RenderableUpdater
   },
   data () {
     return {
