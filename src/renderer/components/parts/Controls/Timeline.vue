@@ -11,8 +11,8 @@
   <div class="track-rows" ref="tracker" @mousemove="onHover">
     <div class="track-scroll" @scroll="onScroll">
       <Tracker :style="getWidthTrack({ irt })" class="tracker-block" :key="irt" v-for="(rt, irt) in renderer.renderables" :ref="'line'" :totalTime="totalTime">
-        <div class="track-title" :style="{ transform: `translate3d(${20  + varying.lefter}px,0,1px)`, 'white-space': 'pre' }">{{ rt.info.text.split('\n').shift() }}</div>
-        <FrameSet  @onSelect="$emit('onSelect', { renderable: rt })" :specs="specs" :e="irt / renderer.renderables.length"  v-if="rt && timeline" :renderable="rt" :totalTime="totalTime" :maxWidth="maxWidth"></FrameSet>
+        <div @click="$emit('onSelect', { renderable: rt })" class="track-title" :style="{ cursor: 'pointer', paddingLeft: '20px', transform: `translate3d(${varying.lefter}px,0,1px)`, 'white-space': 'pre' }">{{ rt.info.text.split('\n').shift() }}</div>
+        <FrameSet @onSelect="$emit('onSelect', { renderable: rt })" :specs="specs" :e="irt / renderer.renderables.length"  v-if="rt && timeline" :renderable="rt" :totalTime="totalTime" :maxWidth="maxWidth"></FrameSet>
       </Tracker>
     </div>
     <div ref="marker" class="time-cursor"></div>
