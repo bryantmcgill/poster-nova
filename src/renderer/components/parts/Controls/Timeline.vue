@@ -49,9 +49,16 @@ export default {
   },
   watch: {
     time () {
-      if (this.$refs['marker']) {
-        this.$refs['marker'].style.left = (this.time / this.totalTime) * (this.maxWidth) + 'px'
-      }
+      /*
+      this.time / this.totalTime = (this.markerPX + this.realtime.lefter) / this.maxWidth
+      (this.time / this.totalTime) * this.maxWidth = (this.markerPX + this.realtime.lefter)
+      this.markerPX = (this.time / this.totalTime) * this.maxWidth - this.realtime.lefter
+      */
+      let markerPX = ((this.time / this.totalTime) * this.maxWidth) - this.realtime.lefter
+      this.$refs.marker.style.left = markerPX + 'px'
+
+      // let visibleTotalTime = this.realtime.lefter
+      // let percentage = this.time / this.totalTime
     },
     markerPX () {
       this.$emit('onHover', {

@@ -143,7 +143,6 @@ export default {
   },
   methods: {
     onStop () {
-      this.time = 0
       window.cancelAnimationFrame(this.rafID)
     },
     onPlay () {
