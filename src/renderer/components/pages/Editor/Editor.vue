@@ -1,18 +1,18 @@
 <template>
   <div class="full">
 
-
-
     <div class="top-right">
       <Previewer v-if="renderer" :renderer="renderer" />
+      <Previewer v-if="videoRenderer && videoRenderer.renderer" :renderer="videoRenderer.renderer" :flip="true" />
     </div>
+
     <RenderableUpdater
       v-if="renderer && specs && specs.items"
       :key="info.id"
       v-for="info in specs.items"
       @attach="renderer.add({ info })"
       @detach="renderer.remove({ info })"
-      @update="renderer.update({ info })"
+      @refresh="renderer.refresh({ info })"
       :item="info"
     >
     </RenderableUpdater>
@@ -23,6 +23,7 @@
       :specs="specs"
       :timeline="timeline"
       :renderer="renderer"
+      @render-video="renderVideo"
       />
     </div>
 
@@ -37,14 +38,13 @@
     >
     </FrameUpdater> -->
 
-
   </div>
 </template>
 
 <script>
 import Previewer from '@/components/parts/Previewer/Previewer.vue'
 import Controls from '@/components/parts/Controls/Controls.vue'
-import { Specs, Renderer, Timeline, RenderableUpdater } from '@/components/parts/'
+import { Specs, Renderer, Timeline, RenderableUpdater, VideoRenderer } from '@/components/parts/'
 
 export default {
   components: {
@@ -54,6 +54,7 @@ export default {
   },
   data () {
     return {
+      videoRenderer: false,
       renderer: false,
       timeline: false,
       specs: false
@@ -68,6 +69,16 @@ export default {
       this.specs = new Specs()
       this.renderer = new Renderer({ mode: Renderer.PREVIEW_MODE })
       this.timeline = new Timeline({ renderer: this.renderer, specs: this.specs })
+    },
+    renderVideo ({ output }) {
+      if (!output) {
+        console.log('no folder')
+        return
+      }
+      this.videoRenderer = new VideoRenderer({ output, specs: this.specs })
+      this.$nextTick(() => {
+        this.videoRenderer.emit('start')
+      })
     }
   }
 }

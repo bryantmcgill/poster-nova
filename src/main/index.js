@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -16,6 +16,17 @@ const winURL = process.env.NODE_ENV === 'development'
   : `file://${__dirname}/index.html`
 
 function createWindow () {
+  const { dialog } = require('electron')
+  ipcMain.on('open-file-dialog', (event) => {
+    dialog.showOpenDialog({
+      properties: ['openDirectory']
+    }, (files) => {
+      if (files) {
+        event.sender.send('selected-directory', files)
+      }
+    })
+  })
+
   /**
    * Initial window options
    */

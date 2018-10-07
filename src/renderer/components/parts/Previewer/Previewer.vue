@@ -12,6 +12,7 @@ export default {
     // ...Compos
   },
   props: {
+    flip: {},
     renderer: {}
   },
   data () {
@@ -19,6 +20,9 @@ export default {
     }
   },
   mounted () {
+    if (this.flip) {
+      this.$refs['canvas-div'].style.transform = 'rotateY(180deg) rotateZ(180deg)'
+    }
     this.setupPreviewer()
   },
   methods: {

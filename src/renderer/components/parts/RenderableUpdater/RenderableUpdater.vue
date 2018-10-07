@@ -12,7 +12,7 @@ export default {
   },
   watch: {
     itemJSON () {
-      this.$emit('update', this.item)
+      this.$emit('refresh', this.item)
     }
   },
   computed: {

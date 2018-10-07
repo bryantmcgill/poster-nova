@@ -12,6 +12,7 @@ export const Decoder = require('./FFmpeg/Decoder.js').default
 export const Encoder = require('./FFmpeg/Encoder.js').default
 export const Renderer = require('./Renderer/Renderer.js').default
 export const Timeline = require('./Renderer/Timeline.js').default
+export const VideoRenderer = require('./Renderer/VideoRenderer.js').default
 export const Specs = require('./Specs/Specs.js').default
 
 export const RenderableUpdater = require('./RenderableUpdater/RenderableUpdater.vue').default

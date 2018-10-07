@@ -4,8 +4,7 @@ export default class Specs {
     this.items = []
     this.trashBin = []
     this.hydrate()
-
-    this.trackInt = 0
+    this.maxTime = 60
   }
   hydrate () {
     let itemsFromLS = window.localStorage.getItem('poster-nova-specs-items')
@@ -71,9 +70,7 @@ export default class Specs {
       start: 2,
       afterStart: 4,
       beforeEnd: 8,
-      end: 10,
-
-      trackID: this.trackInt++
+      end: 10
     }
   }
   makeSimpleText () {

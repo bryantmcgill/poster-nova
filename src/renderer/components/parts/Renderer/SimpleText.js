@@ -52,11 +52,11 @@ export default class SimpleText extends Renderable {
     this.uniforms.wiggle.value += delta * (1.0 - progress)
     // this.group.rotation.z = progress * Math.PI * 2
     // this.mesh.rotation.y = (1.0 - progress) * Math.PI * 2
-    this.uniforms.opacity.value = 1.0 - progress
+    this.uniforms.opacity.value = (1.0 - progress)
 
-    this.mesh.scale.x = (1.0 - progress) || 0.0000000001
-    this.mesh.scale.y = (1.0 - progress) || 0.0000000001
-    this.mesh.scale.z = (1.0 - progress) || 0.0000000001
+    this.mesh.scale.x = 2.0 - (1.0 - progress) || 0.0000000001
+    this.mesh.scale.y = 2.0 - (1.0 - progress) || 0.0000000001
+    this.mesh.scale.z = 2.0 - (1.0 - progress) || 0.0000000001
   }
   onOverall ({ progress, delta }) {
     // if (progress <= 0.01 || progress >= 0.99) {
@@ -73,7 +73,7 @@ export default class SimpleText extends Renderable {
   tick ({ totalTIme }) {
     this.uniforms.time.value = totalTIme
   }
-  update ({ info }) {
+  refresh ({ info }) {
     // latest info
     this.setup({ info })
   }

@@ -63,6 +63,8 @@
 <button @click="onPlay">Play</button>
 <button @click="onStop">Stop</button>
 
+<button @click="selDir">Select Folder</button>
+
 <Timeline
   v-if="specs && timeline && renderer"
   :specs="specs"
@@ -104,6 +106,8 @@
 <script>
 import ACE from '../ACE/ACE.vue'
 import Timeline from './Timeline.vue'
+const { ipcRenderer } = require('electron')
+
 export default {
   components: {
     ACE,
@@ -115,16 +119,27 @@ export default {
     timeline: {}
   },
   data () {
+    var self = this
     return {
       playing: false,
       rafID: 0,
       time: 0,
       varTime: 0,
-      totalTime: 60,
+      get totalTime () {
+        return self.specs.maxTime
+      },
+      set totalTime (v) {
+        self.specs.maxTime = v
+      },
       currentItemID: false
     }
   },
   mounted () {
+    ipcRenderer.on('selected-directory', (event, path) => {
+      console.log(path)
+      this.$emit('render-video', { output: path + '/out.mp4' })
+    })
+
     this.onLoop()
     window.addEventListener('keydown', (evt) => {
       if (evt.keyCode === 32 && !this.currentItemID) {
@@ -142,6 +157,14 @@ export default {
     window.cancelAnimationFrame(this.rafID)
   },
   methods: {
+    selDir () {
+      ipcRenderer.send('open-file-dialog')
+    },
+    changeSel (evt) {
+      let folder = evt.target.value
+      console.log(folder)
+      // this.$emit('render-video', { output: folder })
+    },
     onStop () {
       window.cancelAnimationFrame(this.rafID)
     },
