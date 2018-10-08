@@ -17,12 +17,23 @@ const winURL = process.env.NODE_ENV === 'development'
 
 function createWindow () {
   const { dialog } = require('electron')
-  ipcMain.on('open-file-dialog', (event) => {
+
+  ipcMain.on('open-save-folder-dialog', (event) => {
     dialog.showOpenDialog({
       properties: ['openDirectory']
     }, (files) => {
-      if (files) {
-        event.sender.send('selected-directory', files)
+      if (files && files[0]) {
+        event.sender.send('selected-save-directory', files[0])
+      }
+    })
+  })
+
+  ipcMain.on('open-select-music-dialog', (event) => {
+    dialog.showOpenDialog({
+      properties: ['openFile']
+    }, (files) => {
+      if (files && files[0]) {
+        event.sender.send('selected-music-file', files[0])
       }
     })
   })

@@ -24,6 +24,7 @@
       :timeline="timeline"
       :renderer="renderer"
       @render-video="renderVideo"
+      :progress="progress"
       />
     </div>
 
@@ -57,7 +58,8 @@ export default {
       videoRenderer: false,
       renderer: false,
       timeline: false,
-      specs: false
+      specs: false,
+      progress: 0
     }
   },
   mounted () {
@@ -70,12 +72,15 @@ export default {
       this.renderer = new Renderer({ mode: Renderer.PREVIEW_MODE })
       this.timeline = new Timeline({ renderer: this.renderer, specs: this.specs })
     },
-    renderVideo ({ output }) {
+    renderVideo ({ output, music }) {
       if (!output) {
-        console.log('no folder')
+        console.log('no output target')
         return
       }
-      this.videoRenderer = new VideoRenderer({ output, specs: this.specs })
+      this.videoRenderer = new VideoRenderer({ output, music, specs: this.specs })
+      this.videoRenderer.on('progress', ({ progress }) => {
+        this.progress = progress
+      })
       this.$nextTick(() => {
         this.videoRenderer.emit('start')
       })

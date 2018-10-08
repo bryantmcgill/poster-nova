@@ -128,7 +128,8 @@ export default {
     },
     onScroll (evt) {
       this.realtime.lefter = evt.target.scrollLeft
-      console.log(this.realtime.lefter)
+      // console.log(this.realtime.lefter)
+
       // this.$nextTick(() => {
       //   this.$refs['time-track'].scrollLeft = evt.target.scrollLeft
       // })

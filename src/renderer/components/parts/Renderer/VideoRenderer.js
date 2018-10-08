@@ -5,7 +5,7 @@ import Timeline from './Timeline'
 import Encoder from '../FFmpeg/Encoder'
 
 export default class VidoeRenderer extends EventEmitter {
-  constructor ({ specs, output }) {
+  constructor ({ specs, music, output }) {
     super()
     this.specs = specs
     this.maxTime = specs.maxTime
@@ -17,7 +17,7 @@ export default class VidoeRenderer extends EventEmitter {
     })
 
     this.timeline = new Timeline({ renderer: this.renderer, specs: this.specs })
-    this.encoder = new Encoder({ output })
+    this.encoder = new Encoder({ output, music })
     this.breakLoop = false
 
     this.handlers = {

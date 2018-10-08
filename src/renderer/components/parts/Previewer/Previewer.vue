@@ -19,6 +19,11 @@ export default {
     return {
     }
   },
+  watch: {
+    renderer () {
+      this.setupPreviewer()
+    }
+  },
   mounted () {
     if (this.flip) {
       this.$refs['canvas-div'].style.transform = 'rotateY(180deg) rotateZ(180deg)'
@@ -27,6 +32,7 @@ export default {
   },
   methods: {
     setupPreviewer () {
+      this.$refs['canvas-div'].innerHTML = ''
       this.$refs['canvas-div'].appendChild(this.renderer.canvas)
     }
   }

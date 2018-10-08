@@ -5,9 +5,11 @@ var THREE = require('three')
 export default class SimpleText extends Renderable {
   constructor ({ info }) {
     super(arguments[0])
+    //
     this.setupShaders()
     this.setupMaterial()
     this.setupMesh()
+    //
     this.tt = new TextTexture()
     this.info = info
     this.promise = this.setup({ info })

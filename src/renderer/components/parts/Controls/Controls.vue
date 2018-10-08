@@ -63,7 +63,18 @@
 <button @click="onPlay">Play</button>
 <button @click="onStop">Stop</button>
 
-<button @click="selDir">Select Folder</button>
+<button @click="selDir">Select Save Folder</button>
+<button @click="selMusic">Select Music</button>
+<button @click="renderVideo" :disabled="!saveDir || (progress > 0 && progress < 100)">
+  Render Video
+  <span v-if="progress > 0">{{ (progress * 100).toFixed(2) }}%</span>
+  <span v-if="!saveDir">(require save folder)</span>
+</button>
+<br />
+Save Directory: {{ saveDir }}
+<br />
+Music File (optional): {{ musicFile }}
+
 
 <Timeline
   v-if="specs && timeline && renderer"
@@ -114,6 +125,7 @@ export default {
     Timeline
   },
   props: {
+    progress: {},
     specs: {},
     renderer: {},
     timeline: {}
@@ -131,13 +143,21 @@ export default {
       set totalTime (v) {
         self.specs.maxTime = v
       },
-      currentItemID: false
+      currentItemID: false,
+      saveDir: false,
+      musicFile: undefined
     }
   },
   mounted () {
-    ipcRenderer.on('selected-directory', (event, path) => {
+    ipcRenderer.on('selected-save-directory', (event, path) => {
       console.log(path)
-      this.$emit('render-video', { output: path + '/out.mp4' })
+      this.saveDir = path
+      // this.$emit('render-video', { output: path + `/poster-${new Date()}.mp4` })
+    })
+    ipcRenderer.on('selected-music-file', (event, path) => {
+      console.log(path)
+      this.musicFile = path
+      // this.$emit('render-video', { output: path + `/poster-${new Date()}.mp4` })
     })
 
     this.onLoop()
@@ -158,12 +178,15 @@ export default {
   },
   methods: {
     selDir () {
-      ipcRenderer.send('open-file-dialog')
+      ipcRenderer.send('open-save-folder-dialog')
     },
-    changeSel (evt) {
-      let folder = evt.target.value
-      console.log(folder)
-      // this.$emit('render-video', { output: folder })
+    selMusic () {
+      ipcRenderer.send('open-select-music-dialog')
+    },
+    renderVideo () {
+      if (this.saveDir) {
+        this.$emit('render-video', { music: this.musicFile, output: this.saveDir + `/poster-${new Date()}.mp4` })
+      }
     },
     onStop () {
       window.cancelAnimationFrame(this.rafID)
